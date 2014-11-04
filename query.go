@@ -38,7 +38,7 @@ func (r *Record) query(columnsIndexes, conditionIndexes *[]int) (*[]Record, erro
 	}
 
 	stmt := "SELECT " + columns + " FROM " + table + " WHERE " + condition
-	//fmt.Println("stmt is: ", stmt)
+	//logger.Println("stmt is: ", stmt)
 
 	rows, err := db.Query(stmt)
 	if err != nil {

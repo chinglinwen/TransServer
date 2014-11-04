@@ -64,7 +64,7 @@ func processIpCoreExtra(r *Record) (bool, error) {
 				return false, errors.New("No value is changed, Its okay.")
 			}
 			setCols := &[]string{"status"}
-			setVals := &[]string{"invalid"}
+			setVals := &[]string{"Invalid"}
 
 			conditionCols := make([]string, conditionLen)
 			conditionVals := make([]string, conditionLen)

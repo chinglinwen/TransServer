@@ -7,10 +7,10 @@ import (
 // Update specific columns
 //
 //	setCols:=&[]string{"status"}
-//	setVals:=&[]string{"invalid"}
+//	setVals:=&[]string{"Invalid"}
 //
 //	conditionCols:=&[]string{"localid","status"}
-//	conditionVals:=&[]string{"7320","valid"}
+//	conditionVals:=&[]string{"7320","Valid"}
 //
 //	update(r.table,setCols,setVals,conditionCols,conditionVals)
 //

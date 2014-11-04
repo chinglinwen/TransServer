@@ -31,10 +31,12 @@ func handle(w http.ResponseWriter, req *http.Request) {
 
 	switch table {
 	case "ip_core", "ip_extra":
+
 		if fmt.Sprintf("%v", condition) == "[]" {
 			fmt.Fprintf(w, "Condition is mising.\n")
 			return
 		}
+
 		if ok, err := processIpCoreExtra(record); err != nil {
 			fmt.Fprintf(w, "processIpCoreExtra error: %v\n", err)
 		} else if ok {
@@ -45,6 +47,7 @@ func handle(w http.ResponseWriter, req *http.Request) {
 			logger.Printf("There no error, but is not ok, Should never get here.\n")
 		}
 	case "ip_conn", "syscheck_result":
+
 		if ok, err := processSyscheckResult(record); err != nil {
 			fmt.Fprintf(w, "processSyscheckResult error: %v\n", err)
 		} else if ok {

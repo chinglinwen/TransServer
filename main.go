@@ -34,7 +34,7 @@ func main() {
 
 	//Display version info.
 	if *version {
-		fmt.Println("TransServer version=1.0.0")
+		fmt.Println("TransServer version=1.0.1")
 		os.Exit(0)
 	}
 

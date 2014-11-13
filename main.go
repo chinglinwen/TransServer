@@ -30,6 +30,13 @@ func main() {
 	//flag.StringVar(&path, "path", ".", "File server path.")
 	//flag.StringVar(&filter, "filter", "", "A string, If matched, will service matched file only.")
 
+	sql-drive := flag.String("sql-drive","mysql","The database drive name.")
+	dbuser := flag.String("dbuser","sysCheckV2","Database username.")
+	dbpass := flag.String("dbpass","sysCheckV2123","Database password.")
+	dbip := flag.String("dbip","10.100.2.108","Database ip address.")
+	dbport := flag.String("dbport","3307","Database port number.")
+	dbname := flag.String("dbname","M","Which database to be use.")
+	
 	flag.Parse()
 
 	//Display version info.
@@ -45,21 +52,21 @@ func main() {
 	}
 
 	//Removed os.O_APPEND for log file size concern.
-	/*
-	   logfile, err := os.OpenFile("TransServer.log", os.O_RDWR|os.O_CREATE, 0666)
-	   logfile, err := os.OpenFile(os.Stdout, os.O_RDWR|os.O_CREATE, 0666)
-	   if err != nil {
-	           log.Panic(err)
-	   }
-	   defer logfile.Close()
-	*/
+	logfile, err := os.OpenFile("TransServer.log", os.O_RDWR|os.O_CREATE, 0666)
+	logfile, err := os.OpenFile(os.Stdout, os.O_RDWR|os.O_CREATE, 0666)
+	if err != nil {
+	        log.Panic(err)
+	}
+	defer logfile.Close()
 
-	//logger = log.New(logfile, "", log.LstdFlags)
-	logger = log.New(os.Stdout, "", log.LstdFlags)
+
+	logger = log.New(logfile, "", log.LstdFlags)
+	//logger = log.New(os.Stdout, "", log.LstdFlags)
 
 	//db, err := sql.Open("mysql", "user:pass@tcp(localhost:3306)/test?charset=utf8")
 	var err error
-	db, err = sql.Open("mysql", "sysCheckV2:sysCheckV2123@tcp(10.100.2.108:3307)/M")
+	dsn:=fmt.Sprintf("%v:%v@tcp(%v:%v)/%v",*dbuser,*dbpass,*dbip,*dbport,*dbname)
+	db, err = sql.Open(*sql-drive, dsn)
 	if err != nil {
 		logger.Panic(err)
 	}

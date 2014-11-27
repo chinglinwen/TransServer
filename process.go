@@ -56,7 +56,7 @@ func processIpCoreExtra(r *Record) (bool, error) {
 		if recordsCnt == 0 {
 			return false, errors.New("Query get zero record, should never get here.")
 		} else if recordsCnt == 1 {
-			isSame, err := r.compare(&(*records)[0], &columnsIndexes)
+			isSame, err := r.compare(&(*records)[0], &conditionIndexes)
 			if err != nil {
 				return false, err
 			}

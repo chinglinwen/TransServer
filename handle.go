@@ -30,7 +30,7 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	//logger.Printf("Got record: %v\n", record)
 
 	switch table {
-	case "ip_core", "ip_extra":
+	case "ip_core", "ip_extra", "_FST_TAB_cnt" :
 
 		if fmt.Sprintf("%v", condition) == "[]" {
 			fmt.Fprintf(w, "Condition is mising.\n")

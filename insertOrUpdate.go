@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 )
 
@@ -55,13 +56,19 @@ func insertOrUpdate(r *Record) (bool, error) {
 			conditionCols[i] = r.Columns[v]
 			conditionVals[i] = r.Values[v] //need to be valid
 		}
-	
+
 		affectedCnt, err := update(r.Table, &(r.Columns), &(r.Values), &conditionCols, &conditionVals)
 		if err != nil {
 			return false, err
 		}
-		if affectedCnt != 1 {
-			return false, errors.New("insertOrUpdate: Update affectedCnt is not equal 1, But its okay.")
+
+		if affectedCnt == 0 {
+			return false, errors.New("insertOrUpdate: No need update, Its okay.")
+		}
+
+		if affectedCnt > 1 {
+			return false, fmt.Errorf("insertOrUpdate: Update affectedCnt is %v,"+
+				"Should not get here, Suppose  okay.", affectedCnt)
 		}
 		return true, nil
 	}

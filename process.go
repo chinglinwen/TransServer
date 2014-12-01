@@ -112,3 +112,7 @@ func processSyscheckResult(r *Record) (bool, error) {
 func processDefault(r *Record) (bool, error) {
 	return processSyscheckResult(r)
 }
+
+func processOnlyOneEntry(r *Record) (bool, error) {
+	return insertOrUpdate(r)
+}

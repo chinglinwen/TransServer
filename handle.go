@@ -30,7 +30,7 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	//logger.Printf("Got record: %v\n", record)
 
 	switch table {
-	case "ip_core", "ip_extra", "_FST_TAB_cnt" :
+	case "ip_core", "ip_extra" :
 
 		if fmt.Sprintf("%v", condition) == "[]" {
 			fmt.Fprintf(w, "Condition is mising.\n")
@@ -58,6 +58,23 @@ func handle(w http.ResponseWriter, req *http.Request) {
 			fmt.Fprintf(w, "There no error, but is not ok, Should never get here.\n")
 			logger.Printf("There no error, but is not ok, Should never get here.\n")
 		}
+	case "FST_TAB_cnt" :
+	
+		if fmt.Sprintf("%v", condition) == "[]" {
+			fmt.Fprintf(w, "Condition is mising.\n")
+			return
+		}
+
+		if ok, err := processOnlyOneEntry(record); err != nil {
+			fmt.Fprintf(w, "processOnlyOneEntry error: %v\n", err)
+		} else if ok {
+			fmt.Fprintf(w, "okay\n")
+			logger.Printf("Table: %v, Localid: %v is processed okay.\n", table, record.Values[0])
+		} else {
+			fmt.Fprintf(w, "There no error, but is not ok, Should never get here.\n")
+			logger.Printf("There no error, but is not ok, Should never get here.\n")
+		}
+	
 	default:
 		//processDefault(record)
 		fmt.Fprintf(w, "Unknow table name.\n")

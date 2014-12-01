@@ -22,7 +22,7 @@ func insertOrUpdate(r *Record) (bool, error) {
 			return false, err
 		}
 		if conditionIndexes[i] >= len(r.Columns) {
-			return false, errors.New("ConditionIndexes out of range.")
+			return false, errors.New("insertOrUpdate: ConditionIndexes out of range.")
 		}
 	}
 
@@ -45,7 +45,7 @@ func insertOrUpdate(r *Record) (bool, error) {
 			return false, err
 		}
 		if affectedCnt != 1 {
-			return false, errors.New("Insert affectedCnt is not equal 1")
+			return false, errors.New("insertOrUpdate: Insert affectedCnt is not equal 1")
 		}
 		return true, nil
 	} else {
@@ -61,7 +61,7 @@ func insertOrUpdate(r *Record) (bool, error) {
 			return false, err
 		}
 		if affectedCnt != 1 {
-			return false, errors.New("Update affectedCnt is not equal 1, But its okay.")
+			return false, errors.New("insertOrUpdate: Update affectedCnt is not equal 1, But its okay.")
 		}
 		return true, nil
 	}

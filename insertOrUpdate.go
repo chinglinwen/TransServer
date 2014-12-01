@@ -56,7 +56,7 @@ func insertOrUpdate(r *Record) (bool, error) {
 			conditionVals[i] = r.Values[v] //need to be valid
 		}
 	
-		affectedCnt, err := update(r.Table, r.Columns, r.Values, &conditionCols, &conditionVals)
+		affectedCnt, err := update(r.Table, &(r.Columns), &(r.Values), &conditionCols, &conditionVals)
 		if err != nil {
 			return false, err
 		}

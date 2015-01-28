@@ -14,6 +14,7 @@ type Record struct {
 	Columns   []string
 	Values    []string
 	Condition []string
+	Way	  string
 }
 
 var (
@@ -41,7 +42,7 @@ func main() {
 
 	//Display version info.
 	if *version {
-		fmt.Println("TransServer version=1.0.1")
+		fmt.Println("TransServer version=1.0.2")
 		os.Exit(0)
 	}
 

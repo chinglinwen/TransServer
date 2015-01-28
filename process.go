@@ -114,7 +114,6 @@ func processDefault(r *Record) (bool, error) {
 	return directInsert(r)
 }
 
-
 // Do the insert for the record.
 // If exists then update.
 //

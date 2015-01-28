@@ -14,7 +14,7 @@ type Record struct {
 	Columns   []string
 	Values    []string
 	Condition []string
-	Way	  string
+	Way       string
 }
 
 var (

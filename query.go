@@ -71,7 +71,7 @@ func (r *Record) query(columnsIndexes, conditionIndexes *[]int) (*[]Record, erro
 			}
 		}
 
-		record := Record{table, cols, value, nil}
+		record := Record{Table: table, Columns: cols, Values: value}
 		records = append(records, record)
 	}
 	return &records, nil

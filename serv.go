@@ -5,8 +5,8 @@ import (
 )
 
 func serv() {
-	http.HandleFunc("/show", show)
-	http.HandleFunc("/insert", handle)
+	http.HandleFunc("/query", queryHandle)
+	http.HandleFunc("/insert", insertHandle)
 	logger.Print("Start listening now...")
 
 	err := http.ListenAndServe(":"+port, nil)

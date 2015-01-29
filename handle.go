@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func handle(w http.ResponseWriter, req *http.Request) {
+func insertHandle(w http.ResponseWriter, req *http.Request) {
 	table := req.FormValue("table")
 	columns := strings.Split(req.FormValue("columns"), ",")
 	values := strings.Split(req.FormValue("values"), ",")
@@ -100,4 +100,71 @@ func doInsertUpdate(w http.ResponseWriter, r *Record) {
 		fmt.Fprintf(w, "There is no error, but it is not ok, Should never get here.\n")
 		logger.Printf("There is no error, but it is not ok, Should never get here.\n")
 	}
+}
+
+func queryHandle(w http.ResponseWriter, req *http.Request) { 
+	table := req.FormValue("table")
+	columns := strings.Split(req.FormValue("columns"), ",")
+	values := strings.Split(req.FormValue("values"), ",")
+	condition := strings.Split(req.FormValue("condition"), ",")
+	way := req.FormValue("way")
+
+	if table == "" {
+		fmt.Fprintf(w, "Table name is missing.\n")
+		return
+	}
+	if fmt.Sprintf("%v", columns) == "[]" || fmt.Sprintf("%v", values) == "[]" {
+		fmt.Fprintf(w, "Columns or Values string it is not present.\n")
+		return
+	}
+	if len(columns) != len(values) {
+		fmt.Fprintf(w, "", columns, values)
+		fmt.Fprintf(w, "Columns and Values it is not alignment.\n")
+		return
+	}
+
+	record := &Record{table, columns, values, condition, way}
+	//logger.Printf("Got record: %v\n", record)
+
+	records,err := record.doQuery()
+	if err != nil {
+		fmt.Fprintf(w, "%v\n", err)
+	} else {
+		fmt.Fprintf(w, "%v\n", *records )
+		//logger.Printf("Table: %v, Localid: %v is processed okay.\n", r.Table, r.Values[0])
+	}
+	
+}
+
+func (r *Record) doQeury ()  (*[]Record, error) {
+	conditionLen := len(r.Condition)
+	conditionIndexes := make([]int, conditionLen)
+	for i, err := 0, errors.New(""); i < conditionLen; i++ {
+		conditionIndexes[i], err = strconv.Atoi(r.Condition[i])
+		if err != nil {
+			return false, err
+		}
+		if conditionIndexes[i] >= len(r.Columns) {
+			return false, errors.New("insertUpdate: ConditionIndexes out of range.")
+		}
+	}
+
+	//Default columnsIndexes is for all columns.
+	//
+	columnsLen := len(r.Columns)
+	columnsIndexes := make([]int, columnsLen)
+	for i, _ := range r.Columns {
+		columnsIndexes[i] = i
+	}
+
+	cnt, err := r.queryCnt(&conditionIndexes)
+	if err != nil {
+		return false, err
+	}
+
+	records, err := r.query(&columnsIndexes, &conditionIndexes)
+	if err != nil {
+		return false, err
+	}	
+	return records, nil
 }

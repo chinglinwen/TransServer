@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -102,7 +104,7 @@ func doInsertUpdate(w http.ResponseWriter, r *Record) {
 	}
 }
 
-func queryHandle(w http.ResponseWriter, req *http.Request) { 
+func queryHandle(w http.ResponseWriter, req *http.Request) {
 	table := req.FormValue("table")
 	columns := strings.Split(req.FormValue("columns"), ",")
 	values := strings.Split(req.FormValue("values"), ",")
@@ -126,26 +128,30 @@ func queryHandle(w http.ResponseWriter, req *http.Request) {
 	record := &Record{table, columns, values, condition, way}
 	//logger.Printf("Got record: %v\n", record)
 
-	records,err := record.doQuery()
+	records, err := record.doQuery()
 	if err != nil {
 		fmt.Fprintf(w, "%v\n", err)
 	} else {
-		fmt.Fprintf(w, "%v\n", *records )
+		//fmt.Fprintf(w, "%v\n", *records)
 		//logger.Printf("Table: %v, Localid: %v is processed okay.\n", r.Table, r.Values[0])
 	}
-	
+
+	for _, r := range *records {
+		fmt.Fprintf(w, "%v\n", r.Values)
+	}
+
 }
 
-func (r *Record) doQeury ()  (*[]Record, error) {
+func (r *Record) doQuery() (*[]Record, error) {
 	conditionLen := len(r.Condition)
 	conditionIndexes := make([]int, conditionLen)
 	for i, err := 0, errors.New(""); i < conditionLen; i++ {
 		conditionIndexes[i], err = strconv.Atoi(r.Condition[i])
 		if err != nil {
-			return false, err
+			return nil, err
 		}
 		if conditionIndexes[i] >= len(r.Columns) {
-			return false, errors.New("insertUpdate: ConditionIndexes out of range.")
+			return nil, errors.New("insertUpdate: ConditionIndexes out of range.")
 		}
 	}
 
@@ -156,15 +162,15 @@ func (r *Record) doQeury ()  (*[]Record, error) {
 	for i, _ := range r.Columns {
 		columnsIndexes[i] = i
 	}
-
-	cnt, err := r.queryCnt(&conditionIndexes)
-	if err != nil {
-		return false, err
-	}
-
+	/*
+		cnt, err := r.queryCnt(&conditionIndexes)
+		if err != nil {
+			return nil, err
+		}
+	*/
 	records, err := r.query(&columnsIndexes, &conditionIndexes)
 	if err != nil {
-		return false, err
-	}	
+		return nil, err
+	}
 	return records, nil
 }
